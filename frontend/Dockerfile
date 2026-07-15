@@ -18,8 +18,11 @@ RUN npm run build
 # Stage 2: Servidor Web Nginx para servir os estáticos
 FROM nginx:alpine
 
-# Copia os arquivos compilados do React para a pasta de arquivos estáticos do Nginx
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Copia os arquivos compilados do React para o subdiretório /erp do Nginx
+COPY --from=builder /app/dist /usr/share/nginx/html/erp
+
+# Copia a página principal de respostas para o index.html da raiz
+COPY respostas-desafio.html /usr/share/nginx/html/index.html
 
 # Copia a configuração personalizada do Nginx para suportar SPAs
 COPY nginx.conf /etc/nginx/conf.d/default.conf
