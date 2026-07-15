@@ -1,0 +1,16 @@
+DESAFIO INICIAL — Estágio Full Stack (Suporte & Produto) | redegess
+====================================================================
+
+Este arquivo faz parte da SITUAÇÃO 2 do desafio.
+
+O QUE FAZER:
+1. Abra o arquivo "sistema-com-bugs.html" no seu navegador para ver o sistema funcionando (e com os bugs).
+2. Abra o mesmo arquivo em um editor de código (VS Code, Sublime, ou até o Bloco de Notas).
+3. Os 3 bugs estão no JavaScript, no FINAL do arquivo (dentro da tag <script>).
+4. Encontre, corrija e salve.
+5. Devolva este arquivo corrigido junto com o seu documento de respostas das 3 situações.
+
+Prazo: 48 horas a partir do recebimento.
+Pode usar IA (Claude, ChatGPT, Copilot) — só explique seu raciocínio.
+
+Dúvidas: rh@redegess.com.br

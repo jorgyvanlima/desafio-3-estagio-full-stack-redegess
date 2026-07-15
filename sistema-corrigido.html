@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaello · Novo Orçamento — CORRIGIDO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#328D45; --green-d:#26723A; --navy:#101A24; --ink:#101A24;
+  --slate:#5A6B7B; --line:#E4EAF1; --light:#F6F9F7; --bg:#EEF3F0;
+  --font:'Plus Jakarta Sans',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+  --danger: #C0392B; --danger-light: #FDECEA;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px}
+
+/* faixa do desafio */
+.brief{background:var(--navy);color:#CBD5E1;padding:28px 0}
+.wrap{max-width:920px;margin:0 auto;padding:0 22px}
+.brief h1{font-size:22px;color:#fff;font-weight:800;margin-bottom:6px}
+.brief .tag{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#7CC994;display:block;margin-bottom:10px}
+.brief p{font-size:15px;max-width:70ch}
+.brief .alert-success-banner {
+  background: rgba(124, 201, 148, 0.1);
+  border: 1px solid rgba(124, 201, 148, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 15px;
+  color: #7CC994;
+  font-size: 14.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* sistema */
+.sys{background:#fff;border:1px solid var(--line);border-radius:16px;margin-top:32px;overflow:hidden;box-shadow:0 10px 30px rgba(16,26,36,.06)}
+.sys-head{background:var(--navy);color:#fff;padding:16px 24px;display:flex;align-items:center;gap:12px}
+.sys-head .logo{font-weight:800;font-size:18px}
+.sys-head .logo b{color:#7CC994}
+.sys-head .crumb{font-size:13px;color:#94A3B8;margin-left:auto;font-family:var(--mono)}
+.sys-body{padding:26px 24px}
+.form-row{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:12px;align-items:end;margin-bottom:20px}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--slate);margin-bottom:6px}
+input{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:9px;font-family:var(--font);font-size:15px;color:var(--ink);transition: border-color 0.2s;}
+input:focus{outline:none;border-color:var(--green)}
+.btn{background:var(--green);color:#fff;border:none;padding:11px 20px;border-radius:9px;font-family:var(--font);font-weight:600;font-size:15px;cursor:pointer;white-space:nowrap;transition: background 0.2s;}
+.btn:hover{background:var(--green-d)}
+table{width:100%;border-collapse:collapse;margin-bottom:8px}
+th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--slate);padding:10px 8px;border-bottom:2px solid var(--line)}
+td{padding:12px 8px;border-bottom:1px solid var(--line);font-size:14.5px}
+td.num,th.num{text-align:right}
+.rm{background:none;border:1px solid var(--line);color:var(--danger);width:30px;height:30px;border-radius:7px;cursor:pointer;font-size:16px;line-height:1;transition: all 0.2s;}
+.rm:hover{background:var(--danger-light);border-color:var(--danger)}
+.vazio{text-align:center;color:var(--slate);padding:24px;font-size:14px}
+.totais{background:var(--light);border-radius:12px;padding:20px 22px;margin-top:18px;display:grid;gap:10px;max-width:340px;margin-left:auto}
+.totais .lin{display:flex;justify-content:space-between;font-size:14.5px;color:var(--slate)}
+.totais .lin.grand{border-top:2px solid var(--line);padding-top:12px;margin-top:4px;font-size:20px;font-weight:800;color:var(--ink)}
+.ajustes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;max-width:340px;margin-left:auto}
+
+/* Toast container e animação */
+#toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: grid;
+  gap: 10px;
+}
+.toast {
+  background: var(--navy);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 250px;
+  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  border-left: 4px solid var(--green);
+}
+.toast.error {
+  border-left-color: var(--danger);
+}
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes fadeOut {
+  to { opacity: 0; transform: translateY(10px); }
+}
+</style>
+</head>
+<body>
+
+<div class="brief">
+  <div class="wrap">
+    <span class="tag">Central de Suporte Kaello · SISTEMA CORRIGIDO</span>
+    <h1>Versão Corrigida e Otimizada do Orçamento</h1>
+    <p>Esta versão resolve todos os bugs reportados de forma robusta e adiciona tratamentos de erros de entrada, validações de integridade e feedback de usabilidade moderna.</p>
+    <div class="alert-success-banner">
+      <strong>✨ Correções Aplicadas:</strong>
+      <span>Conversão explícita de tipos no Frete, Fórmula matemática de Desconto correta (/100), Remoção de itens por índice dinâmico, Validação contra valores negativos/vazios e Focus dinâmico.</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="sys">
+    <div class="sys-head">
+      <span class="logo">kaello<b>.</b></span>
+      <span class="crumb">Comercial › Orçamentos › Novo</span>
+    </div>
+    <div class="sys-body">
+      <div class="form-row">
+        <div>
+          <label for="produto">Produto / Serviço</label>
+          <input id="produto" placeholder="Ex: Licença mensal" autocomplete="off">
+        </div>
+        <div>
+          <label for="qtd">Quantidade</label>
+          <input id="qtd" type="number" min="1" value="1">
+        </div>
+        <div>
+          <label for="preco">Preço unitário (R$)</label>
+          <input id="preco" type="number" min="0" step="0.01" value="0.00">
+        </div>
+        <button class="btn" onclick="adicionarItem()">Adicionar</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th class="num">Qtd</th>
+            <th class="num">Preço un.</th>
+            <th class="num">Subtotal</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="lista"></tbody>
+      </table>
+
+      <div class="ajustes">
+        <div>
+          <label for="desconto">Desconto (%)</label>
+          <input id="desconto" type="number" min="0" max="100" value="0" oninput="render()">
+        </div>
+        <div>
+          <label for="frete">Frete (R$)</label>
+          <input id="frete" type="number" min="0" step="0.01" value="0.00" oninput="render()">
+        </div>
+      </div>
+
+      <div class="totais">
+        <div class="lin"><span>Subtotal</span><span id="v-subtotal">R$ 0,00</span></div>
+        <div class="lin"><span>Desconto</span><span id="v-desconto">- R$ 0,00</span></div>
+        <div class="lin"><span>Frete</span><span id="v-frete">R$ 0,00</span></div>
+        <div class="lin grand"><span>Total</span><span id="v-total">R$ 0,00</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Container de Toasts para feedback de usabilidade (Substitui alerts invasivos) -->
+<div id="toast-container"></div>
+
+<script>
+// ====================================================================
+// SISTEMA DE ORÇAMENTOS — KAELLO (CORRIGIDO)
+// ====================================================================
+
+let itens = [];
+
+// Função de Notificação Toast (Melhoria de Usabilidade - Situação 3)
+function showToast(mensagem, tipo = 'success') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast ${tipo === 'error' ? 'error' : ''}`;
+  toast.innerText = mensagem;
+  
+  container.appendChild(toast);
+  
+  // Remove o toast após 3 segundos
+  setTimeout(() => {
+    toast.style.animation = 'fadeOut 0.3s forwards';
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+function adicionarItem() {
+  const produtoInput = document.getElementById('produto');
+  const qtdInput = document.getElementById('qtd');
+  const precoInput = document.getElementById('preco');
+
+  const produto = produtoInput.value.trim();
+  const qtd = parseInt(qtdInput.value, 10);
+  const preco = parseFloat(precoInput.value);
+
+  // Validação: Impede adicionar produto vazio ou com dados inválidos (Melhoria de robustez bônus)
+  if (!produto) { 
+    showToast('Informe o nome do produto ou serviço.', 'error');
+    produtoInput.focus();
+    return; 
+  }
+  
+  if (isNaN(qtd) || qtd <= 0) {
+    showToast('A quantidade deve ser um número maior que zero.', 'error');
+    qtdInput.focus();
+    return;
+  }
+
+  if (isNaN(preco) || preco < 0) {
+    showToast('O preço unitário não pode ser negativo.', 'error');
+    precoInput.focus();
+    return;
+  }
+
+  const subtotal = qtd * preco;
+  itens.push({ produto: produto, qtd: qtd, preco: preco, subtotal: subtotal });
+
+  // Limpa e redefine os valores padrões dos inputs
+  produtoInput.value = '';
+  qtdInput.value = 1;
+  precoInput.value = '0.00';
+  
+  // Focus automático no campo de produto para agilizar o próximo cadastro (Melhoria de usabilidade - Situação 3)
+  produtoInput.focus();
+  
+  showToast(`Item "${produto}" adicionado com sucesso!`);
+  render();
+}
+
+// CORREÇÃO BUG #1044: Alterado o índice estático "0" para o parâmetro dinâmico "indice"
+function removerItem(indice) {
+  if (indice >= 0 && indice < itens.length) {
+    const nomeItem = itens[indice].produto;
+    itens.splice(indice, 1);
+    showToast(`Item "${nomeItem}" removido com sucesso.`);
+    render();
+  }
+}
+
+function formatar(valor) {
+  // Formatação segura que garante que nulos/NaNs sejam tratados como zero
+  const valorSeguro = isNaN(Number(valor)) ? 0 : Number(valor);
+  return 'R$ ' + valorSeguro.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function render() {
+  const lista = document.getElementById('lista');
+  lista.innerHTML = '';
+
+  const descontoInput = document.getElementById('desconto');
+  const freteInput = document.getElementById('frete');
+
+  // Estado Vazio (Empty State): Se a lista está vazia, limpa ou exibe feedback
+  if (itens.length === 0) {
+    lista.innerHTML = '<tr><td colspan="5" class="vazio">Nenhum item adicionado ainda. Adicione produtos acima para calcular o orçamento.</td></tr>';
+    
+    // Bônus/Situação 3: Desabilita desconto e frete quando a lista está vazia
+    descontoInput.disabled = true;
+    freteInput.disabled = true;
+    descontoInput.value = 0;
+    freteInput.value = '0.00';
+  } else {
+    // Reabilita quando houver itens
+    descontoInput.disabled = false;
+    freteInput.disabled = false;
+  }
+
+  itens.forEach(function (item, i) {
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td>' + item.produto + '</td>' +
+      '<td class="num">' + item.qtd + '</td>' +
+      '<td class="num">' + formatar(item.preco) + '</td>' +
+      '<td class="num">' + formatar(item.subtotal) + '</td>' +
+      // O evento de clique passa o índice "i" correspondente
+      '<td class="num"><button class="rm" onclick="removerItem(' + i + ')" title="Remover item">×</button></td>';
+    lista.appendChild(tr);
+  });
+
+  // Soma dos subtotais
+  let subtotalGeral = 0;
+  itens.forEach(function (item) {
+    subtotalGeral += item.subtotal;
+  });
+
+  // Captura e conversão segura das taxas
+  // CORREÇÃO BUG #1042: O valor do frete agora é convertido explicitamente para número (Float) para evitar concatenação de strings
+  const frete = parseFloat(freteInput.value) || 0;
+  const descontoPct = parseFloat(descontoInput.value) || 0;
+
+  // Validações locais adicionais contra valores negativos (Melhoria de robustez bônus)
+  const descontoPctSeguro = Math.max(0, Math.min(100, descontoPct)); // Trava entre 0% e 100%
+  const freteSeguro = Math.max(0, frete);
+
+  // CORREÇÃO BUG #1043: O divisor do desconto foi ajustado para 100 para converter o percentual adequadamente
+  const valorDesconto = subtotalGeral * (descontoPctSeguro / 100);
+  const totalComDesconto = subtotalGeral - valorDesconto;
+
+  // Realiza a soma aritmética com segurança (valores previamente convertidos para Float)
+  const total = totalComDesconto + freteSeguro;
+
+  document.getElementById('v-subtotal').innerText = formatar(subtotalGeral);
+  document.getElementById('v-desconto').innerText = '- ' + formatar(valorDesconto);
+  document.getElementById('v-frete').innerText = formatar(freteSeguro);
+  document.getElementById('v-total').innerText = formatar(total);
+}
+
+// Inicializa a renderização com estado vazio
+render();
+</script>
+</body>
+</html>

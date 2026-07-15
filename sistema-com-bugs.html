@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaello · Novo Orçamento — Desafio de Suporte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#328D45; --green-d:#26723A; --navy:#101A24; --ink:#101A24;
+  --slate:#5A6B7B; --line:#E4EAF1; --light:#F6F9F7; --bg:#EEF3F0;
+  --font:'Plus Jakarta Sans',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px}
+
+/* faixa do desafio */
+.brief{background:var(--navy);color:#CBD5E1;padding:28px 0}
+.wrap{max-width:920px;margin:0 auto;padding:0 22px}
+.brief h1{font-size:22px;color:#fff;font-weight:800;margin-bottom:6px}
+.brief .tag{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#7CC994;display:block;margin-bottom:10px}
+.brief p{font-size:15px;max-width:70ch}
+.chamados{display:grid;gap:12px;margin-top:18px}
+.chamado{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-left:4px solid #7CC994;border-radius:10px;padding:14px 16px}
+.chamado b{color:#fff;font-size:13px;font-family:var(--mono);display:block;margin-bottom:4px}
+.chamado span{font-size:14.5px;color:#E2E8F0}
+
+/* sistema */
+.sys{background:#fff;border:1px solid var(--line);border-radius:16px;margin-top:32px;overflow:hidden;box-shadow:0 10px 30px rgba(16,26,36,.06)}
+.sys-head{background:var(--navy);color:#fff;padding:16px 24px;display:flex;align-items:center;gap:12px}
+.sys-head .logo{font-weight:800;font-size:18px}
+.sys-head .logo b{color:#7CC994}
+.sys-head .crumb{font-size:13px;color:#94A3B8;margin-left:auto;font-family:var(--mono)}
+.sys-body{padding:26px 24px}
+.form-row{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:12px;align-items:end;margin-bottom:20px}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--slate);margin-bottom:6px}
+input{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:9px;font-family:var(--font);font-size:15px;color:var(--ink)}
+input:focus{outline:none;border-color:var(--green)}
+.btn{background:var(--green);color:#fff;border:none;padding:11px 20px;border-radius:9px;font-family:var(--font);font-weight:600;font-size:15px;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--green-d)}
+table{width:100%;border-collapse:collapse;margin-bottom:8px}
+th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--slate);padding:10px 8px;border-bottom:2px solid var(--line)}
+td{padding:12px 8px;border-bottom:1px solid var(--line);font-size:14.5px}
+td.num,th.num{text-align:right}
+.rm{background:none;border:1px solid var(--line);color:#C0392B;width:30px;height:30px;border-radius:7px;cursor:pointer;font-size:16px;line-height:1}
+.rm:hover{background:#FDECEA;border-color:#C0392B}
+.vazio{text-align:center;color:var(--slate);padding:24px;font-size:14px}
+.totais{background:var(--light);border-radius:12px;padding:20px 22px;margin-top:18px;display:grid;gap:10px;max-width:340px;margin-left:auto}
+.totais .lin{display:flex;justify-content:space-between;font-size:14.5px;color:var(--slate)}
+.totais .lin.grand{border-top:2px solid var(--line);padding-top:12px;margin-top:4px;font-size:20px;font-weight:800;color:var(--ink)}
+.ajustes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;max-width:340px;margin-left:auto}
+</style>
+</head>
+<body>
+
+<div class="brief">
+  <div class="wrap">
+    <span class="tag">Desafio · Central de Suporte Kaello</span>
+    <h1>3 clientes abriram chamados sobre a tela de Orçamento</h1>
+    <p>A equipe de suporte recebeu os relatos abaixo. O sistema abaixo é o mesmo que os clientes usam — ele está com os defeitos relatados. Sua missão: <strong style="color:#fff">reproduzir cada problema, encontrar a causa no código e corrigir</strong>. Os bugs estão no JavaScript, no final do arquivo.</p>
+    <div class="chamados">
+      <div class="chamado"><b>Chamado #1042 — Marina, do RH da Contabilize</b><span>"Quando eu preencho o frete, o total do orçamento fica um valor gigante e sem sentido. Coloquei R$ 20 de frete e o total virou 'R$ 13020'!"</span></div>
+      <div class="chamado"><b>Chamado #1043 — Roberto, da Silva &amp; Cia</b><span>"Apliquei 10% de desconto num orçamento e o sistema zerou o valor inteiro! Não faz sentido, 10% não pode zerar tudo."</span></div>
+      <div class="chamado"><b>Chamado #1044 — Paula, da NovaTech</b><span>"Toda vez que eu clico pra remover um item da lista, ele apaga o item errado — sempre some o primeiro, não o que eu escolhi."</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="sys">
+    <div class="sys-head">
+      <span class="logo">kaello<b>.</b></span>
+      <span class="crumb">Comercial › Orçamentos › Novo</span>
+    </div>
+    <div class="sys-body">
+      <div class="form-row">
+        <div><label>Produto / Serviço</label><input id="produto" placeholder="Ex: Licença mensal"></div>
+        <div><label>Quantidade</label><input id="qtd" type="number" value="1"></div>
+        <div><label>Preço unitário (R$)</label><input id="preco" type="number" value="0"></div>
+        <button class="btn" onclick="adicionarItem()">Adicionar</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Produto</th><th class="num">Qtd</th><th class="num">Preço un.</th><th class="num">Subtotal</th><th></th></tr>
+        </thead>
+        <tbody id="lista"></tbody>
+      </table>
+
+      <div class="ajustes">
+        <div><label>Desconto (%)</label><input id="desconto" type="number" value="0" oninput="render()"></div>
+        <div><label>Frete (R$)</label><input id="frete" type="number" value="0" oninput="render()"></div>
+      </div>
+
+      <div class="totais">
+        <div class="lin"><span>Subtotal</span><span id="v-subtotal">R$ 0,00</span></div>
+        <div class="lin"><span>Desconto</span><span id="v-desconto">- R$ 0,00</span></div>
+        <div class="lin"><span>Frete</span><span id="v-frete">R$ 0,00</span></div>
+        <div class="lin grand"><span>Total</span><span id="v-total">R$ 0,00</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ====================================================================
+// SISTEMA DE ORÇAMENTOS — KAELLO
+// Há 3 bugs neste código, correspondentes aos 3 chamados de suporte.
+// Reproduza cada problema, encontre a causa e corrija.
+// Dica: teste adicionando itens e preenchendo desconto e frete.
+// ====================================================================
+
+let itens = [];
+
+function adicionarItem() {
+  const produto = document.getElementById('produto').value;
+  const qtd = document.getElementById('qtd').value;
+  const preco = document.getElementById('preco').value;
+
+  if (!produto) { alert('Informe o produto.'); return; }
+
+  const subtotal = qtd * preco;
+  itens.push({ produto: produto, qtd: qtd, preco: preco, subtotal: subtotal });
+
+  document.getElementById('produto').value = '';
+  document.getElementById('qtd').value = 1;
+  document.getElementById('preco').value = 0;
+  render();
+}
+
+function removerItem(indice) {
+  // Remove um item da lista pelo índice
+  itens.splice(0, 1);
+  render();
+}
+
+function formatar(valor) {
+  return 'R$ ' + Number(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function render() {
+  const lista = document.getElementById('lista');
+  lista.innerHTML = '';
+
+  if (itens.length === 0) {
+    lista.innerHTML = '<tr><td colspan="5" class="vazio">Nenhum item adicionado ainda.</td></tr>';
+  }
+
+  itens.forEach(function (item, i) {
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td>' + item.produto + '</td>' +
+      '<td class="num">' + item.qtd + '</td>' +
+      '<td class="num">' + formatar(item.preco) + '</td>' +
+      '<td class="num">' + formatar(item.subtotal) + '</td>' +
+      '<td class="num"><button class="rm" onclick="removerItem(' + i + ')">×</button></td>';
+    lista.appendChild(tr);
+  });
+
+  // soma dos subtotais
+  let subtotalGeral = 0;
+  itens.forEach(function (item) {
+    subtotalGeral += item.subtotal;
+  });
+
+  const descontoPct = document.getElementById('desconto').value;
+  const frete = document.getElementById('frete').value;
+
+  // aplica o desconto percentual sobre o subtotal
+  const valorDesconto = subtotalGeral * (descontoPct / 10);
+  const totalComDesconto = subtotalGeral - valorDesconto;
+
+  // soma o frete ao total
+  const total = totalComDesconto + frete;
+
+  document.getElementById('v-subtotal').innerText = formatar(subtotalGeral);
+  document.getElementById('v-desconto').innerText = '- ' + formatar(valorDesconto);
+  document.getElementById('v-frete').innerText = formatar(frete);
+  document.getElementById('v-total').innerText = formatar(total);
+}
+
+render();
+</script>
+</body>
+</html>
