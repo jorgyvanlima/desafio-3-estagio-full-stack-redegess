@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrega Desafio Técnico · Estágio Full Stack — redegess</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --navy: #0B1B2B;
+      --navy-light: #1E293B;
+      --navy-dark: #020617;
+      --emerald: #10B981;
+      --emerald-dark: #059669;
+      --emerald-light: #ECFDF5;
+      --orange: #F97316;
+      --orange-light: #FFF7ED;
+      --danger: #EF4444;
+      --danger-light: #FEF2F2;
+      --slate-50: #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-400: #94A3B8;
+      --slate-600: #475569;
+      --slate-800: #1E293B;
+      --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius: 12px;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+      --transition: all 0.2s ease-in-out;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--slate-50);
+      color: var(--slate-800);
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    a {
+      color: var(--emerald-dark);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Faixa Superior / Header */
+    header {
+      background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
+      color: #fff;
+      padding: 3rem 0;
+      border-bottom: 4px solid var(--emerald);
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 60%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .header-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      background-color: rgba(16, 185, 129, 0.2);
+      color: var(--emerald);
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--slate-400);
+    }
+
+    .meta-item strong {
+      color: #fff;
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+    /* Navegação Rápida */
+    .nav-bar {
+      background-color: #fff;
+      border-bottom: 1px solid var(--slate-200);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      padding: 0.75rem 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .nav-link {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--slate-600);
+      white-space: nowrap;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      transition: var(--transition);
+    }
+
+    .nav-link:hover {
+      background-color: var(--slate-100);
+      color: var(--navy);
+      text-decoration: none;
+    }
+
+    /* Conteúdo Principal */
+    main {
+      max-width: 1000px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.5rem;
+    }
+
+    section {
+      background-color: #fff;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      box-shadow: var(--shadow-sm);
+      scroll-margin-top: 80px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 2px solid var(--slate-100);
+      padding-bottom: 0.75rem;
+    }
+
+    h2 svg {
+      color: var(--emerald);
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--navy-light);
+      margin: 1.5rem 0 0.75rem;
+    }
+
+    p {
+      color: var(--slate-600);
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    ul, ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.25rem;
+      color: var(--slate-600);
+      font-size: 0.95rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Chamados de Clientes (Estilizados) */
+    .ticket {
+      background-color: var(--slate-50);
+      border-left: 4px solid var(--emerald);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .ticket strong {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--navy);
+      display: block;
+      margin-bottom: 0.5rem;
+      font-style: normal;
+    }
+
+    /* Caixa de Resposta de Email */
+    .email-container {
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      background-color: var(--slate-50);
+      margin: 1.5rem 0;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .email-header {
+      background-color: var(--slate-200);
+      padding: 0.75rem 1.25rem;
+      font-size: 0.8rem;
+      color: var(--slate-600);
+      border-bottom: 1px solid var(--slate-200);
+      display: grid;
+      gap: 0.25rem;
+    }
+
+    .email-header span strong {
+      color: var(--slate-800);
+    }
+
+    .email-body {
+      padding: 1.5rem;
+      font-family: inherit;
+      color: var(--slate-800);
+      background-color: #ffffff;
+      font-size: 0.95rem;
+      white-space: pre-line;
+    }
+
+    /* Cartão de Hipóteses */
+    .hypothesis-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .hypothesis-card {
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      background-color: var(--slate-50);
+      transition: var(--transition);
+    }
+
+    .hypothesis-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--slate-400);
+    }
+
+    .hypothesis-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hypothesis-title span {
+      background-color: var(--navy);
+      color: #fff;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .hyp-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+    }
+
+    .hyp-badge.react { background-color: #E0F2FE; color: #0369A1; }
+    .hyp-badge.server { background-color: #FEE2E2; color: #B91C1C; }
+    .hyp-badge.cache { background-color: #FEF3C7; color: #B45309; }
+
+    /* Estilos de código comparativo (Diffs) */
+    .code-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1rem 0 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .code-comparison {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .code-block {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--slate-200);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .code-block-header {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.5rem 1rem;
+      background-color: var(--slate-100);
+      border-bottom: 1px solid var(--slate-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+    }
+
+    .code-block-header.buggy { color: var(--danger); background-color: var(--danger-light); }
+    .code-block-header.fixed { color: var(--emerald-dark); background-color: var(--emerald-light); }
+
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.825rem;
+      padding: 1rem;
+      background-color: #1E293B;
+      color: #F8FAFC;
+      overflow-x: auto;
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    .added-line { color: #10B981; font-weight: 600; }
+    .removed-line { color: #EF4444; text-decoration: line-through; }
+
+    /* Alerta/Dica */
+    .note-box {
+      background-color: var(--orange-light);
+      border-left: 4px solid var(--orange);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .note-box strong {
+      color: var(--orange);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    /* Melhorias de usabilidade */
+    .feature-card {
+      display: flex;
+      gap: 1.25rem;
+      padding: 1.5rem;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      background-color: var(--slate-50);
+      margin-bottom: 1.25rem;
+    }
+
+    .feature-icon {
+      background-color: var(--emerald);
+      color: white;
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .feature-text h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.25rem;
+    }
+
+    .feature-text p {
+      margin-bottom: 0;
+    }
+
+    /* Docker steps */
+    .step-list {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      background-color: var(--navy);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-weight: bold;
+      font-size: 0.85rem;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.2rem;
+    }
+
+    .step-content strong {
+      color: var(--navy);
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .terminal-command {
+      font-family: var(--font-mono);
+      background-color: #0F172A;
+      color: #38BDF8;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Faixa do Topo -->
+  <header>
+    <div class="container">
+      <span class="header-badge">Desafio Técnico · Resolvido</span>
+      <h1>Relatório de Entrega & Resoluções</h1>
+      <p>Estágio Full Stack (Suporte & Produto) — Kaello ERP comercial</p>
+      
+      <div class="meta-grid">
+        <div class="meta-item">
+          <strong>Candidato</strong>
+          <span>Jorgyvan Lima</span>
+        </div>
+        <div class="meta-item">
+          <strong>Repositório GitHub</strong>
+          <span><a href="https://github.com/jorgyvanlima/desafio-3-estagio-full-stack-redegess" target="_blank" style="color: var(--emerald);">desafio-3-estagio-full-stack-redegess</a></span>
+        </div>
+        <div class="meta-item">
+          <strong>Arquitetura do Projeto</strong>
+          <span>Docker (Nginx + Node API + Postgres)</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navegação de Ancoragem Rápida -->
+  <nav class="nav-bar">
+    <div class="nav-container">
+      <a href="#situacao1" class="nav-link">Situação 1: Chamado Fernanda</a>
+      <a href="#situacao2" class="nav-link">Situação 2: Diagnóstico de Bugs</a>
+      <a href="#situacao3" class="nav-link">Situação 3: Olhar de Produto</a>
+      <a href="#docker" class="nav-link">Guia de Execução Local</a>
+    </div>
+  </nav>
+
+  <!-- Corpo do Documento -->
+  <main>
+
+    <!-- SITUAÇÃO 1 -->
+    <section id="situacao1">
+      <h2>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        Situação 1: O Chamado da Fernanda
+      </h2>
+      
+      <div class="ticket">
+        <strong>Chamado #2087 — Cliente: Fernanda, financeiro da Alfa Serviços</strong>
+        "Cliquei no botão Gerar fatura e a tela ficou totalmente branca. Não apareceu erro nenhum, não emitiu nada. Preciso disso hoje, é urgente!"
+      </div>
+
+      <h3>1. Mensagem de Primeiro Atendimento (Empatia e Alinhamento)</h3>
+      <p>O primeiro contato com a cliente preza por **empatia imediata**, transparência no plano de ação e acolhimento sobre a urgência relatada.</p>
+      
+      <div class="email-container">
+        <div class="email-header">
+          <span><strong>De:</strong> suporte@redegess.com.br</span>
+          <span><strong>Para:</strong> fernanda@alfaservicos.com.br</span>
+          <span><strong>Assunto:</strong> [Urgência] Chamado #2087 — Emissão de Fatura / Alfa Serviços</span>
+        </div>
+        <div class="email-body">Olá, Fernanda. Tudo bem?
+
+Sou o Jorgyvan, da equipe de suporte técnico da redegess, e estarei acompanhando você pessoalmente na resolução deste chamado hoje.
+
+Compreendo perfeitamente o nível de urgência da emissão desta fatura hoje para a Alfa Serviços e o impacto operacional que isso causa em seu fechamento financeiro. Gostaria de tranquilizá-la: já tratei seu caso como prioridade máxima e nossa equipe de engenharia já está investigando a fundo.
+
+Para acelerar o diagnóstico do motivo de a tela ter apresentado o comportamento em branco, você poderia nos fornecer algumas informações rápidas? 
+
+1. Qual é o **número da fatura** ou o **nome do cliente** que você estava faturando?
+2. Se for possível, tente gerar a fatura usando uma **aba anônima** do seu navegador ou a partir de outro navegador (como Google Chrome, Firefox ou Edge). Esse teste nos ajuda a saber se há um conflito local.
+3. Se você notar algum link ou código específico na barra de endereços (URL) após a tela ficar branca, poderia compartilhar conosco?
+
+Estarei monitorando seus retornos por aqui. Manterei você informada de cada avanço técnico feito nas próximas horas até termos o documento emitido.
+
+Atenciosamente,
+Jorgyvan Lima
+Suporte ao Cliente & Tecnologia · redegess</div>
+      </div>
+
+      <h3>2. Três Hipóteses Técnicas & Planos de Investigação</h3>
+      <div class="hypothesis-grid">
+        <!-- Hipótese 1 -->
+        <div class="hypothesis-card">
+          <div class="hypothesis-title">
+            <span>1</span>
+            Javascript Runtime Error (Crash de Componente React)
+            <span class="hyp-badge react">React</span>
+          </div>
+          <p><strong>Causa:</strong> Erro fatal durante a renderização do frontend. Comum quando o script tenta acessar uma propriedade de um objeto nulo ou indefinido (ex: `fatura.cliente.nome` quando o objeto `cliente` não foi carregado da API). Sem um *Error Boundary* implementado, qualquer exceção no React quebra a renderização inteira, limpando a tela.</p>
+          <p><strong>Como investigar:</strong> Solicitar que a cliente abra o Inspetor do Navegador (F12) e verifique a aba **Console** em busca de erros marcados em vermelho como `Uncaught TypeError: Cannot read properties of undefined` ou `Render error`.</p>
+        </div>
+
+        <!-- Hipótese 2 -->
+        <div class="hypothesis-card">
+          <div class="hypothesis-title">
+            <span>2</span>
+            Falha Catastrófica de Servidor (Erro HTTP 500 na REST API)
+            <span class="hyp-badge server">API / DB</span>
+          </div>
+          <p><strong>Causa:</strong> O backend falhou ao processar a criação da fatura (ex: deadlock de concorrência na tabela `faturas` do banco de dados, falha de comunicação externa na API de emissão de boletos ou estouro de memória). O frontend não tratou a falha do status 500 no `catch()` da requisição HTTP, deixando a aplicação presa em um estado indefinido ou em tela de carregamento que crasha.</p>
+          <p><strong>Como investigar:</strong> Acessar os logs de container da API executando <span class="terminal-command">docker logs kaello_backend_api</span> filtrando os logs pelo horário do erro da cliente, verificando falhas de conexão ou queries inválidas.</p>
+        </div>
+
+        <!-- Hipótese 3 -->
+        <div class="hypothesis-card">
+          <div class="hypothesis-title">
+            <span>3</span>
+            Conflito de Bundle/Cache do Navegador (Script Obsoleto)
+            <span class="hyp-badge cache">Cache</span>
+          </div>
+          <p><strong>Causa:</strong> Após deploy recente de correções no servidor, o formato do payload de faturamento mudou. O navegador da cliente mantém em cache de disco o script JavaScript antigo (`bundle.js`). Ao chamar a API com estruturas de dados obsoletas, a API retorna erro e o bundle local falha na execução.</p>
+          <p><strong>Como investigar:</strong> Verificar se o faturamento funciona via aba anônima (que não carrega cache antigo de disco) e conferir as diretivas de cache no cabeçalho do Nginx (`Cache-Control: no-cache, no-store`).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SITUAÇÃO 2 -->
+    <section id="situacao2">
+      <h2>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+        Situação 2: Diagnóstico e Correção dos Bugs
+      </h2>
+      <p>Abaixo estão os trechos do código contendo as falhas e suas respectivas correções matemáticas e lógicas.</p>
+
+      <!-- BUG 1042 -->
+      <h3>🐛 Chamado #1042 (Marina — Frete Gigante)</h3>
+      <p><strong>Causa:</strong> O campo de frete é obtido no formulário como String. Na operação <span class="terminal-command">const total = totalComDesconto + frete</span>, o operador `+` realiza uma <strong>concatenação de strings</strong> ao invés de uma adição numérica aritmética (ex: `130 + "20" = "13020"`).</p>
+      
+      <div class="code-comparison">
+        <div class="code-block">
+          <div class="code-block-header buggy">⚠️ Código Original (Com Bug)</div>
+          <pre><code>const frete = document.getElementById('frete').value;
+
+// Soma o frete ao total
+const total = totalComDesconto + frete;</code></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-block-header fixed">✅ Código Corrigido</div>
+          <pre><code><span class="added-line">const frete = parseFloat(document.getElementById('frete').value) || 0;</span>
+
+// Soma o frete ao total (Soma numérica segura)
+const total = totalComDesconto + frete;</code></pre>
+        </div>
+      </div>
+
+      <!-- BUG 1043 -->
+      <h3>🐛 Chamado #1043 (Roberto — Desconto Zerando Total)</h3>
+      <p><strong>Causa:</strong> A fórmula matemática de desconto dividia o percentual por `10` em vez de `100`. Assim, ao aplicar 10% de desconto, o cálculo computava um desconto de 100% (`10 / 10 = 1`), reduzindo o total financeiro para zero.</p>
+      
+      <div class="code-comparison">
+        <div class="code-block">
+          <div class="code-block-header buggy">⚠️ Código Original (Com Bug)</div>
+          <pre><code>// Aplica o desconto percentual sobre o subtotal
+const valorDesconto = subtotalGeral * (descontoPct / 10);
+const totalComDesconto = subtotalGeral - valorDesconto;</code></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-block-header fixed">✅ Código Corrigido</div>
+          <pre><code>// Aplica o desconto percentual sobre o subtotal
+<span class="added-line">const valorDesconto = subtotalGeral * (descontoPct / 100);</span>
+const totalComDesconto = subtotalGeral - valorDesconto;</code></pre>
+        </div>
+      </div>
+
+      <!-- BUG 1044 -->
+      <h3>🐛 Chamado #1044 (Paula — Remoção Incorreta)</h3>
+      <p><strong>Causa:</strong> A função `removerItem(indice)` recebia o índice correto do item no loop da tabela, mas possuía uma instrução estática para deletar o primeiro elemento do array (`itens.splice(0, 1)`), ignorando o parâmetro.</p>
+      
+      <div class="code-comparison">
+        <div class="code-block">
+          <div class="code-block-header buggy">⚠️ Código Original (Com Bug)</div>
+          <pre><code>function removerItem(indice) {
+  // Remove um item da lista pelo índice
+  itens.splice(0, 1);
+  render();
+}</code></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-block-header fixed">✅ Código Corrigido</div>
+          <pre><code>function removerItem(indice) {
+  // Remove um item da lista pelo índice dinâmico
+  <span class="added-line">itens.splice(indice, 1);</span>
+  render();
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- BÔNUS -->
+      <div class="note-box">
+        <strong>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Bônus: Problemas de Robustez Encontrados e Corrigidos
+        </strong>
+        <ul>
+          <li><strong>Validação de Entradas:</strong> Bloqueada a inclusão de itens com quantidade menor ou igual a zero, ou com valores de preço negativos.</li>
+          <li><strong>Prevenção de NaN:</strong> Adicionados operadores de fallback (`|| 0`) nos inputs de frete e desconto para evitar a corrupção do cálculo financeiro caso os campos sejam apagados.</li>
+          <li><strong>Focus Automático (UX):</strong> Implementada a lógica para focar automaticamente a entrada "Produto / Serviço" após a inserção bem-sucedida, facilitando o cadastro de múltiplos itens.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SITUAÇÃO 3 -->
+    <section id="situacao3">
+      <h2>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        Situação 3: Olhar de Produto e Usabilidade
+      </h2>
+      <p>Melhorias de produto focadas no ganho de eficiência no dia a dia do faturista.</p>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+        <div class="feature-text">
+          <h4>Dropdown Inteligente com Autocomplete (Combobox)</h4>
+          <p>No lugar do input de texto genérico para o produto, implementou-se um autocomplete integrado ao catálogo de produtos. Ao selecionar, o sistema preenche o preço unitário padrão automaticamente. Isso reduz significativamente erros de digitação e poupa o tempo gasto na busca manual de tabelas de preços.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+        </div>
+        <div class="feature-text">
+          <h4>Estado Vazio (Empty State) Direcionado</h4>
+          <p>Quando nenhum item foi adicionado ainda, as caixas de desconto e frete ficam desabilitadas, e uma ilustração explicativa instrui o usuário a adicionar o primeiro item. Isso elimina ruídos de usabilidade e evita cálculos ilógicos sem produtos cadastrados.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+        </div>
+        <div class="feature-text">
+          <h4>Notificações Toasts Não-Bloqueantes</h4>
+          <p>Substituição do pop-up `alert()` do navegador por alertas flutuantes elegantes e com fechamento automático (Toasts). Ao contrário do alert tradicional, o toast não impede a digitação rápida do faturista nem bloqueia o fluxo de trabalho.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GUIA DOCKER -->
+    <section id="docker">
+      <h2>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"></path></svg>
+        Guia de Execução Local do Ambiente Dockerizado
+      </h2>
+      <p>O projeto foi conteinerizado para facilitar a replicação do banco de dados, da API e do frontend em qualquer máquina avaliadora.</p>
+      
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <strong>Subir os Containers</strong>
+            <p>Com o Docker Desktop ligado na máquina, abra o terminal no diretório raiz do projeto e execute:</p>
+            <p><span class="terminal-command">docker-compose up --build -d</span></p>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <strong>Confirmar a Integridade dos Containers</strong>
+            <p>Valide que o PostgreSQL, o Nginx e o Node.js estão de pé com as portas expostas:</p>
+            <p><span class="terminal-command">docker-compose ps</span></p>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <strong>Interagir com a Solução Modernizada</strong>
+            <p>O frontend Nginx com React estará de pé na URL **`http://localhost:8080`**. Faça testes de autocomplete de produtos, inserção rápida e remoção.</p>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <strong>Simular o Chamado #2087 da Fernanda (Tela Branca)</strong>
+            <p>Selecione o cliente **Alfa Serviços** no topo da tela do React. Vá no console de estudos no rodapé, desmarque a caixa de *Modo Seguro* e clique em **Faturar Orçamento**. O backend simulará o erro HTTP 500 que provocará a tela branca instantaneamente no frontend não tratado.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>
