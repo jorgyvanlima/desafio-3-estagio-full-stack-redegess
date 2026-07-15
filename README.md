@@ -1,108 +1,136 @@
 # Kaello ERP Comercial · Gestão de Orçamentos e Faturamento
 
-Este repositório contém a resolução completa do **Desafio Técnico Inicial para a vaga de Estágio Full Stack** (Suporte & Produto) da **redegess**. 
+Este repositório contém a resolução completa do **Desafio Técnico Inicial para a vaga de Estágio Full Stack** (Suporte & Produto) da **redegess**.
 
-O projeto foi construído com foco em demonstrar **maestria técnica, rigor lógico e visão de produto**, entregando soluções para os três cenários propostos no desafio, organizados em uma estrutura de portfólio profissional para estudo local e avaliação.
-
----
-
-## 🚀 Tecnologias Utilizadas
-
-A solução foi estruturada utilizando as ferramentas indicadas para o ecossistema tecnológico do desafio:
-
-1. **Frontend Legado**: HTML5, Vanilla CSS e Vanilla JavaScript (DOM nativo).
-2. **Frontend Moderno**: React.js (Vite), TypeScript (tipagem estrita) e Lucide Icons.
-3. **Backend / API**: Node.js e Express (simulação de REST API e in-memory DB).
-4. **Banco de Dados**: Modelagem Relacional SQL (PostgreSQL com triggers de cálculo e massa de teste).
-5. **Controle de Versão**: Git e GitHub.
+O projeto foi inteiramente estruturado seguindo as melhores práticas de desenvolvimento, com **ambientes conteinerizados via Docker e Docker Compose**, simulando um ambiente real de produção com banco de dados **PostgreSQL**, **Node.js** e **React (Vite)** rodando em rede privada e servido por **Nginx**.
 
 ---
 
-## 📂 Estrutura do Projeto
+## 🐋 Por que Docker? (Melhores Práticas)
 
-O repositório está organizado da seguinte forma:
+Utilizar o Docker para este desafio traz vantagens críticas que simulam o fluxo profissional do dia a dia no time de tecnologia:
+1. **Isolamento de Ambiente**: Garante que o projeto execute da mesma forma em qualquer sistema operacional (Windows, macOS ou Linux), sem a necessidade de instalar bancos de dados ou runtimes Node.js localmente na máquina ("*Funciona na minha máquina*").
+2. **Banco de Dados Real e Triggers**: Em vez de usar mock temporário em memória, rodamos uma instância real do **PostgreSQL 15** em container, permitindo testar fisicamente os Triggers de banco que calculam e recalculam os subtotais e totais de orçamentos diretamente nas tabelas.
+3. **Servidor Web de Produção (Nginx)**: O frontend em React não roda em servidor de desenvolvimento instável. Ele é compilado em produção (Multi-stage build) e servido diretamente pelo **Nginx**, refletindo a usabilidade final real e mitigando problemas de caching.
+4. **Orquestração Rápida**: Com apenas um comando, toda a arquitetura de banco de dados, backend e frontend é erguida de forma encadeada na ordem correta de inicialização.
+
+---
+
+## 🏗️ Arquitetura do Docker Compose
+
+O arquivo `docker-compose.yml` na raiz gerencia três serviços principais dentro de uma rede virtual bridge chamada `kaello-network`:
+
+```mermaid
+graph TD
+    subgraph Rede Docker: kaello-network
+        F[Frontend: Nginx - Porta 8080] -->|Consome API| B[Backend: Node.js/Express - Porta 3000]
+        B -->|Queries SQL| D[(Banco de Dados: PostgreSQL - Porta 5432)]
+    end
+    U((Usuário/Avaliador)) -->|Acessa App| F
+    U -->|Testa Endpoints| B
+    U -->|Inspeciona Dados| D
+```
+
+1. **`db` (kaello_postgres_db)**:
+   - Base de dados PostgreSQL 15.
+   - Script SQL `database/init.sql` montado na pasta especial `/docker-entrypoint-initdb.d/` para executar as tabelas, triggers e dados iniciais automaticamente no primeiro boot.
+   - Porta exposta: `5432` (para conexões externas de ferramentas como DBeaver ou pgAdmin).
+2. **`backend` (kaello_backend_api)**:
+   - Executa a API Node.js.
+   - Dockerfile baseado em `node:20-alpine`.
+   - Conecta-se ao serviço `db` utilizando variáveis de ambiente de rede interna.
+   - Implementa uma **lógica de retry inteligente** no `server-api.js` que monitora a inicialização do Postgres para evitar que a API quebre durante o boot inicial do banco.
+3. **`frontend` (kaello_frontend_nginx)**:
+   - Dockerfile de dois estágios (Multi-stage Build).
+   - Estágio 1 (Builder): Instala dependências do React e compila o bundle de produção via Vite (`npm run build`).
+   - Estágio 2 (Runner): Transfere os arquivos gerados em `/dist` para a pasta pública do servidor **Nginx** e copia a configuração de rotas `nginx.conf`.
+   - Porta exposta: `8080`.
+
+---
+
+## 📂 Estrutura do Projeto Reorganizada
 
 ```bash
-├── respostas-desafio.md       # Relatório formal respondendo às Situações 1, 2 e 3
+├── respostas-desafio.md       # Relatório respondendo às Situações 1, 2 e 3 (focado em Docker)
 ├── sistema-com-bugs.html      # Arquivo original legado contendo as falhas relatadas
-├── sistema-corrigido.html     # Versão legada 100% corrigida, segura e com melhorias de UX
-├── server-api.js              # Servidor backend local em Express com simulação de erros
-├── banco-de-dados.sql         # Script SQL contendo modelagem relacional, triggers e dados
-└── novo-orcamento-react/      # Modernização completa da tela de orçamentos (React + TS + Vite)
-    ├── src/
-    │   ├── App.tsx            # Lógica comercial, autocomplete, toasts e simulação de erros
-    │   ├── index.css          # Sistema de design premium responsivo
-    │   └── main.tsx
+├── sistema-corrigido.html     # Versão legada corrigida e segura com toasts CSS
+├── docker-compose.yml         # Orquestrador dos containers (Postgres, API, Nginx)
+├── database/
+│   └── init.sql               # Script SQL de modelagem do banco montado no container Postgres
+├── backend/
+│   ├── Dockerfile             # Dockerfile para o container Node.js
+│   ├── package.json           # Dependências da API (express, cors, pg)
+│   └── server-api.js          # API REST Node.js integrada ao banco Postgres
+└── frontend/
+    ├── Dockerfile             # Dockerfile multi-stage com Nginx
+    ├── nginx.conf             # Configuração do Nginx para suportar SPA React
     ├── package.json
-    └── tsconfig.json
+    ├── src/
+    │   ├── App.tsx            # Lógica comercial, autocomplete, toasts e simulações
+    │   └── index.css          # Design system premium e responsivo
+    └── vite.config.ts
 ```
 
 ---
 
-## 📋 Resumo das Resoluções
+## ⚙️ Como Executar a Aplicação com Docker
 
-### 📌 Situação 1: O Chamado da Fernanda (Alfa Serviços)
-* **Atendimento**: Redação de e-mail empático, focado no cliente e contendo um plano de ação transparente.
-* **Perguntas**: 4 perguntas rápidas e não-técnicas para capturar o ID do orçamento, o horário exato, comportamento em aba anônima e evidências visuais.
-* **Hipóteses Técnicas**:
-  1. *React Render Crash (Erro de JavaScript)*: O frontend tenta ler uma propriedade de um objeto nulo (`null.propriedade`), travando a árvore de componentes por falta de *Error Boundaries*.
-  2. *Erro 500 no Servidor (REST API)*: Falha de conexão ou exceção no banco durante a requisição de faturamento, travando o estado da UI sem feedback de erro.
-  3. *Incompatibilidade de Cache (Bundle Mismatch)*: Script local antigo incompatível com as novas rotas do backend recém-implantadas.
+Certifique-se de ter o **Docker** e o **Docker Compose** instalados na sua máquina.
 
-### 📌 Situação 2: Correção dos Bugs (HTML Legado)
-* **Bug #1042 (Marina — Frete Gigante)**: O valor do frete era concatenado como String. Corrigido com conversão numérica explícita usando `parseFloat()`.
-* **Bug #1043 (Roberto — Desconto Zerando Total)**: A fórmula de desconto multiplicava a taxa em um fator incorreto (dividido por 10). Corrigido para `desconto / 100`.
-* **Bug #1044 (Paula — Remoção Incorreta)**: A função de remoção continha o índice rígido `0` no `splice`. Corrigido para o índice dinâmico `indice` passado por parâmetro.
-* **Melhorias Bônus**: Validação contra quantidade/preço negativos ou campos de texto vazios, tratamento de erros `NaN` com coalescência nula e retorno de foco para entrada contínua de dados.
-
-### 📌 Situação 3: Olhar de Produto e Usabilidade (React + TS)
-* **Combobox inteligente (Autocomplete)**: Campo de busca que lê a lista de produtos cadastrados da API REST e autocompleta os preços correspondentes.
-* **Empty State (Estado Vazio)**: Layout limpo que desabilita campos de descontos e fretes enquanto o orçamento estiver sem itens cadastrados.
-* **Toasts Animados e Foco Dinâmico**: Substituição de alertas do navegador (`alert()`) por notificações flutuantes não obstrutivas, com retorno automático de foco no campo de produto após inserção.
-
----
-
-## ⚙️ Como Executar o Projeto Localmente
-
-### 1. Testar o HTML Legado (Situação 2)
-* Basta abrir os arquivos `sistema-com-bugs.html` e `sistema-corrigido.html` diretamente em qualquer navegador moderno para interagir e visualizar as correções acontecendo em tempo real.
-
-### 2. Iniciar o Servidor Backend (API REST)
-O backend simula os cadastros de clientes e produtos, as rotas de orçamento e a falha de faturamento que causou o chamado da Fernanda.
-
-No diretório raiz do projeto, instale as dependências e inicie o servidor:
-```bash
-# Instale o express e o cors no diretório raiz
-npm install express cors
-
-# Inicie o servidor Node.js
-node server-api.js
-```
-O servidor estará rodando em `http://localhost:3000`.
-
-### 3. Iniciar o Frontend Moderno (React + TypeScript)
-Com o servidor Node.js rodando, abra outro terminal no diretório `novo-orcamento-react`:
+### 1. Clonar e Inicializar os Containers
+No diretório raiz do projeto, execute o comando para baixar as imagens oficiais, construir as imagens locais e iniciar os serviços:
 
 ```bash
-# Entre na pasta do frontend
-cd novo-orcamento-react
-
-# Instale as dependências do Vite, React e Lucide Icons
-npm install
-
-# Inicie o servidor de desenvolvimento
-npm run dev
+# 1. Constrói e inicializa os containers em segundo plano (detached)
+docker-compose up --build -d
 ```
-Abra a URL indicada no terminal (normalmente `http://localhost:5173`) no navegador.
+
+### 2. Verificar os Status dos Serviços
+Você pode monitorar os containers e conferir se todos estão saudáveis executando:
+
+```bash
+# Lista os containers em execução e suas portas
+docker-compose ps
+```
+
+### 3. Acessar as Interfaces
+* **Frontend (React ERP)**: Acesse no navegador em **`http://localhost:8080`**.
+* **Backend (API REST)**: Disponível para testes de endpoints em **`http://localhost:3000`** (ex: `http://localhost:3000/api/produtos` para conferir o autocomplete).
+* **Banco de Dados (PostgreSQL)**: Disponível em `localhost:5432` com usuário `postgres` e senha `postgres`.
+
+### 4. Monitoramento e Logs (Muito Útil para o Chamado #2087)
+Para analisar os logs do servidor em tempo real (como por exemplo, ao simular a falha da Fernanda da Alfa Serviços):
+
+```bash
+# Visualizar logs consolidados de todos os containers
+docker-compose logs -f
+
+# Visualizar logs apenas da API Backend
+docker-compose logs -f backend
+
+# Visualizar logs apenas do Banco de Dados Postgres
+docker-compose logs -f db
+```
+
+### 5. Finalizar os Serviços
+Para desligar os containers e liberar as portas do computador:
+
+```bash
+# Para os containers e remove a rede interna criada
+docker-compose down
+```
 
 ---
 
 ## 🧪 Como Testar a Simulação da "Tela Branca" (Chamado #2087)
 
-O painel moderno em React inclui um **Console do Desenvolvedor e Depurador de Estudos** no rodapé:
-1. **Simular Erro 500 sem Tratamento**: Desmarque a caixa *"Tratamento de Erros Seguro (Modo Recomendado)"*. Selecione o cliente **Alfa Serviços** no topo da tela e clique em **Faturar Orçamento**. O frontend tentará processar a resposta HTML de erro 500 do servidor como se fosse JSON, gerando um erro não tratado que simula o travamento e a **tela branca** reportada pela Fernanda.
-2. **Tratamento Seguro**: Deixe a caixa ativa. Ao clicar em faturar, o frontend captura o erro 500 através do bloco `try/catch` e apresenta um alerta seguro de instabilidade sem travar a interface.
-3. **Simular Crash de Renderização (React)**: Clique no botão *"Forçar Crash de Render"*. O React tentará ler uma propriedade de uma variável nula em tempo de execução, quebrando a árvore e demonstrando visualmente a Hipótese 1 da tela branca.
+Graças ao ambiente Docker, você pode depurar visualmente a **Situação 1** do desafio na tela do frontend React (`http://localhost:8080`):
+1. **Ative a Falha**: No painel de debug no rodapé do React, desmarque a caixa *"Tratamento de Erros Seguro"*.
+2. **Execute o Faturamento**: Selecione o cliente **Alfa Serviços** (ID correspondente ao orçamento #3 no banco Postgres) e clique em **Faturar Orçamento**.
+3. **Veja o Comportamento**:
+   - A API backend simula o deadlock de banco de dados e retorna o erro HTTP `500`.
+   - Sem tratamento de exceção no React (safe mode desligado), o script do frontend tenta acessar propriedades nulas e trava completamente, resultando na **Tela Branca** reportada pela Fernanda.
+   - Você pode conferir a quebra de transação executando `docker-compose logs backend` no terminal para verificar o stack trace do erro 500 simulado no backend.
 
 ---
 

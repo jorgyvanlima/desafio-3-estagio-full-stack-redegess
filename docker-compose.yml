@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # Serviço 1: Banco de Dados Relacional PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: kaello_postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: kaello_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      # Monta o script SQL para inicialização automática do banco de dados na primeira execução
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # Mantém os dados persistidos mesmo que o container seja deletado
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - kaello-network
+
+  # Serviço 2: API REST Node.js + Express
+  backend:
+    build:
+      context: ./backend
+    container_name: kaello_backend_api
+    restart: always
+    environment:
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_DATABASE: kaello_db
+      DB_PORT: 5432
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - kaello-network
+
+  # Serviço 3: Frontend Moderno React + Nginx
+  frontend:
+    build:
+      context: ./frontend
+    container_name: kaello_frontend_nginx
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - kaello-network
+
+volumes:
+  postgres_data:
+
+networks:
+  kaello-network:
+    driver: bridge
