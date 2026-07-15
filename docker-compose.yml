@@ -18,7 +18,7 @@ services:
       # Mantém os dados persistidos mesmo que o container seja deletado
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - kaello-network
+      - mcorecloud-network
 
   # Serviço 2: API REST Node.js + Express
   backend:
@@ -38,7 +38,7 @@ services:
     depends_on:
       - db
     networks:
-      - kaello-network
+      - mcorecloud-network
 
   # Serviço 3: Frontend Moderno React + Nginx
   frontend:
@@ -47,15 +47,16 @@ services:
     container_name: kaello_frontend_nginx
     restart: always
     ports:
-      - "8080:80"
+      - "8082:80" # Porta alternativa para evitar conflito com a porta 8080 na VPS
     depends_on:
       - backend
     networks:
-      - kaello-network
+      - mcorecloud-network
 
 volumes:
   postgres_data:
 
 networks:
-  kaello-network:
-    driver: bridge
+  mcorecloud-network:
+    external: true
+

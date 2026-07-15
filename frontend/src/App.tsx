@@ -76,7 +76,7 @@ export default function App() {
     addLog("Inicializando painel comercial Kaello ERP...", "info");
     
     // Busca clientes da API
-    fetch('http://localhost:3000/api/clientes')
+    fetch('/api/clientes')
       .then(res => {
         if (!res.ok) throw new Error("Falha ao comunicar com a API de Clientes.");
         return res.json();
@@ -86,11 +86,11 @@ export default function App() {
         addLog("Massa de dados de clientes carregada.", "info");
       })
       .catch(err => {
-        addLog(`Erro ao carregar clientes: ${err.message}. Certifique-se de iniciar o backend "server-api.js" na porta 3000!`, "err");
+        addLog(`Erro ao carregar clientes: ${err.message}. Certifique-se de que a API está rodando!`, "err");
       });
 
     // Busca produtos da API (para o Combobox)
-    fetch('http://localhost:3000/api/produtos')
+    fetch('/api/produtos')
       .then(res => {
         if (!res.ok) throw new Error("Falha ao comunicar com a API de Produtos.");
         return res.json();
@@ -219,7 +219,7 @@ export default function App() {
 
     try {
       // Dispara requisição HTTP POST para gerar a fatura no backend
-      const response = await fetch('http://localhost:3000/api/faturas/gerar', {
+      const response = await fetch('/api/faturas/gerar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ orcamento_id: clienteSelected === '1' ? 3 : 1 }) // ID 3 força erro 500 no backend
